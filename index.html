@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Clicker</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#111;
+    color:white;
+    text-align:center;
+}
+
+header{
+    background:#1a1a1a;
+    padding:20px;
+    font-size:32px;
+    font-weight:bold;
+    box-shadow:0 0 10px black;
+}
+
+.container{
+    padding:30px;
+}
+
+.money{
+    font-size:30px;
+    margin-top:20px;
+}
+
+.caseButton{
+    width:220px;
+    height:220px;
+    border:none;
+    border-radius:20px;
+    background:linear-gradient(145deg,#222,#333);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+    transition:0.2s;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+
+.caseButton:hover{
+    transform:scale(1.05);
+}
+
+.inventory{
+    margin-top:40px;
+    width:90%;
+    max-width:900px;
+    margin-left:auto;
+    margin-right:auto;
+    background:#1b1b1b;
+    padding:20px;
+    border-radius:15px;
+}
+
+.inventory h2{
+    margin-top:0;
+}
+
+.skin{
+    background:#222;
+    margin-top:10px;
+    padding:15px;
+    border-radius:10px;
+}
+
+.common{
+    border-left:6px solid gray;
+}
+
+.uncommon{
+    border-left:6px solid lime;
+}
+
+.rare{
+    border-left:6px solid dodgerblue;
+}
+
+.epic{
+    border-left:6px solid purple;
+}
+
+.legendary{
+    border-left:6px solid gold;
+}
+
+.sellBtn{
+    margin-top:10px;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    background:#00aa55;
+    color:white;
+    cursor:pointer;
+}
+
+.sellBtn:hover{
+    background:#00cc66;
+}
+
+.loginBox{
+    background:#1e1e1e;
+    width:90%;
+    max-width:400px;
+    margin:40px auto;
+    padding:25px;
+    border-radius:15px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    background:#333;
+    color:white;
+    box-sizing:border-box;
+}
+
+button{
+    padding:12px 20px;
+    border:none;
+    border-radius:8px;
+}
+
+.loginBtn{
+    margin-top:15px;
+    width:100%;
+    background:#0077ff;
+    color:white;
+    cursor:pointer;
+}
+
+.loginBtn:hover{
+    background:#3399ff;
+}
+
+.hidden{
+    display:none;
+}
+
+.topBar{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+.userCard{
+    background:#222;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+}
+
+.adminPanel{
+    width:90%;
+    max-width:600px;
+    margin:30px auto;
+    background:#1b1b1b;
+    padding:20px;
+    border-radius:15px;
+}
+
+.deleteBtn{
+    background:red;
+    color:white;
+}
+
+.moneyBtn{
+    background:orange;
+    color:white;
+}
+
+.logoutBtn{
+    background:#444;
+    color:white;
+}
+
+#adminOpen{
+    position:fixed;
+    bottom:10px;
+    right:10px;
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    border:none;
+    background:black;
+    color:white;
+    font-size:22px;
+    opacity:0.3;
+    cursor:pointer;
+}
+
+#adminOpen:hover{
+    opacity:1;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+🎁 CASE CLICKER
+</header>
+
+<!-- LOGIN -->
+
+<div class="loginBox" id="loginBox">
+
+    <h2>Player Login</h2>
+
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+
+    <button class="loginBtn" onclick="login()">
+        Login
+    </button>
+
+    <p id="loginStatus"></p>
+
+</div>
+
+<!-- GAME -->
+
+<div class="container hidden" id="game">
+
+    <h1 id="welcome"></h1>
+
+    <div class="money">
+        Money: $<span id="money">0</span>
+    </div>
+
+    <div class="topBar">
+
+        <button class="sellBtn" onclick="openCase()">
+            Open Case ($100)
+        </button>
+
+        <button class="sellBtn" onclick="saveGame()">
+            Save Game
+        </button>
+
+        <button class="logoutBtn" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+    <br>
+
+    <button class="caseButton" onclick="openCase()">
+        🎁
+    </button>
+
+    <div class="inventory">
+
+        <h2>Inventory</h2>
+
+        <div id="inventory"></div>
+
+    </div>
+
+</div>
+
+<!-- ADMIN PANEL -->
+
+<div class="adminPanel hidden" id="adminPanel">
+
+    <h1>⚙ Admin Panel</h1>
+
+    <h2>Create User</h2>
+
+    <input type="text" id="newUser" placeholder="Username">
+    <input type="password" id="newPass" placeholder="Password">
+    <input type="number" id="newMoney" placeholder="Starting Money">
+
+    <button class="loginBtn" onclick="createUser()">
+        Create User
+    </button>
+
+    <h2>All Users</h2>
+
+    <div id="users"></div>
+
+</div>
+
+<button id="adminOpen">⚙</button>
+
+<script>
+
+// =========================
+// ADMIN LOGIN
+// =========================
+
+const ADMIN_USERNAME = "owner";
+const ADMIN_PASSWORD = "caseclickeradmin";
+
+// =========================
+// PLAYER DATA
+// =========================
+
+let currentUser = null;
+
+const skins = [
+
+    {
+        name:"Rusty Pistol",
+        rarity:"common",
+        value:50
+    },
+
+    {
+        name:"Forest Rifle",
+        rarity:"uncommon",
+        value:120
+    },
+
+    {
+        name:"Neon SMG",
+        rarity:"rare",
+        value:350
+    },
+
+    {
+        name:"Dragon AK",
+        rarity:"epic",
+        value:900
+    },
+
+    {
+        name:"Golden Knife",
+        rarity:"legendary",
+        value:2500
+    }
+
+];
+
+// =========================
+// STORAGE
+// =========================
+
+function getUsers(){
+
+    return JSON.parse(
+        localStorage.getItem("cc_users")
+    ) || [];
+
+}
+
+function saveUsers(users){
+
+    localStorage.setItem(
+        "cc_users",
+        JSON.stringify(users)
+    );
+
+}
+
+// =========================
+// PLAYER LOGIN
+// =========================
+
+function login(){
+
+    const username =
+        document.getElementById("username").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    // ADMIN LOGIN
+
+    if(
+        username === ADMIN_USERNAME &&
+        password === ADMIN_PASSWORD
+    ){
+
+        document
+            .getElementById("loginBox")
+            .classList.add("hidden");
+
+        document
+            .getElementById("adminPanel")
+            .classList.remove("hidden");
+
+        loadUsers();
+
+        return;
+    }
+
+    // PLAYER LOGIN
+
+    let users = getUsers();
+
+    const found = users.find(
+        u =>
+        u.username === username &&
+        u.password === password
+    );
+
+    if(found){
+
+        currentUser = found;
+
+        if(!currentUser.inventory){
+
+            currentUser.inventory = [];
+
+        }
+
+        if(currentUser.money === undefined){
+
+            currentUser.money = 1000;
+
+        }
+
+        document
+            .getElementById("loginBox")
+            .classList.add("hidden");
+
+        document
+            .getElementById("game")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("welcome")
+            .innerText =
+            "Welcome " + currentUser.username;
+
+        updateUI();
+
+    } else {
+
+        document
+            .getElementById("loginStatus")
+            .innerText =
+            "Invalid login";
+
+    }
+}
+
+// =========================
+// UPDATE GAME UI
+// =========================
+
+function updateUI(){
+
+    document
+        .getElementById("money")
+        .innerText =
+        currentUser.money;
+
+    const inventoryDiv =
+        document.getElementById("inventory");
+
+    inventoryDiv.innerHTML = "";
+
+    currentUser.inventory.forEach((skin,index)=>{
+
+        inventoryDiv.innerHTML += `
+
+        <div class="skin ${skin.rarity}">
+
+            <h3>${skin.name}</h3>
+
+            <p>Value: $${skin.value}</p>
+
+            <p>Rarity: ${skin.rarity}</p>
+
+            <button
+            class="sellBtn"
+            onclick="sellSkin(${index})">
+
+                Sell
+
+            </button>
+
+        </div>
+
+        `;
+    });
+
+}
+
+// =========================
+// OPEN CASE
+// =========================
+
+function openCase(){
+
+    if(currentUser.money < 100){
+
+        alert("Not enough money");
+
+        return;
+    }
+
+    currentUser.money -= 100;
+
+    const randomSkin =
+        skins[Math.floor(
+            Math.random()*skins.length
+        )];
+
+    currentUser.inventory.push(randomSkin);
+
+    alert("You got: " + randomSkin.name);
+
+    updateUI();
+
+    saveGame();
+
+}
+
+// =========================
+// SELL SKIN
+// =========================
+
+function sellSkin(index){
+
+    const skin =
+        currentUser.inventory[index];
+
+    currentUser.money += skin.value;
+
+    currentUser.inventory.splice(index,1);
+
+    updateUI();
+
+    saveGame();
+
+}
+
+// =========================
+// SAVE GAME
+// =========================
+
+function saveGame(){
+
+    let users = getUsers();
+
+    const index =
+        users.findIndex(
+            u =>
+            u.username === currentUser.username
+        );
+
+    users[index] = currentUser;
+
+    saveUsers(users);
+
+}
+
+// =========================
+// LOGOUT
+// =========================
+
+function logout(){
+
+    location.reload();
+
+}
+
+// =========================
+// CREATE USER
+// =========================
+
+function createUser(){
+
+    const username =
+        document.getElementById("newUser").value;
+
+    const password =
+        document.getElementById("newPass").value;
+
+    const money =
+        Number(
+            document.getElementById("newMoney").value
+        ) || 1000;
+
+    if(!username || !password){
+
+        alert("Fill all fields");
+
+        return;
+    }
+
+    let users = getUsers();
+
+    const exists =
+        users.find(
+            u => u.username === username
+        );
+
+    if(exists){
+
+        alert("User already exists");
+
+        return;
+    }
+
+    users.push({
+
+        username:username,
+        password:password,
+        money:money,
+        inventory:[]
+
+    });
+
+    saveUsers(users);
+
+    loadUsers();
+
+    alert("User created");
+
+}
+
+// =========================
+// LOAD USERS
+// =========================
+
+function loadUsers(){
+
+    const usersDiv =
+        document.getElementById("users");
+
+    usersDiv.innerHTML = "";
+
+    let users = getUsers();
+
+    users.forEach((user,index)=>{
+
+        usersDiv.innerHTML += `
+
+        <div class="userCard">
+
+            <h3>${user.username}</h3>
+
+            <p>Password: ${user.password}</p>
+
+            <p>Money: $${user.money}</p>
+
+            <p>Inventory Items:
+                ${user.inventory.length}
+            </p>
+
+            <button
+            class="moneyBtn"
+            onclick="giveMoney(${index})">
+
+                Give Money
+
+            </button>
+
+            <button
+            class="deleteBtn"
+            onclick="deleteUser(${index})">
+
+                Delete User
+
+            </button>
+
+        </div>
+
+        `;
+    });
+
+}
+
+// =========================
+// GIVE MONEY
+// =========================
+
+function giveMoney(index){
+
+    let amount =
+        prompt("Enter amount");
+
+    if(amount === null) return;
+
+    let users = getUsers();
+
+    users[index].money += Number(amount);
+
+    saveUsers(users);
+
+    loadUsers();
+
+}
+
+// =========================
+// DELETE USER
+// =========================
+
+function deleteUser(index){
+
+    let users = getUsers();
+
+    users.splice(index,1);
+
+    saveUsers(users);
+
+    loadUsers();
+
+}
+
+// =========================
+// SECRET ADMIN BUTTON
+// =========================
+
+document
+.getElementById("adminOpen")
+.onclick = () => {
+
+    alert(
+`ADMIN LOGIN
+
+Username: owner
+Password: caseclickeradmin`
+    );
+
+};
+
+</script>
+
+</body>
+</html>
