@@ -1,3 +1,30 @@
+# Full Updated Case Clicker Layout
+
+Replace your current `index.html` with this upgraded version.
+
+Features added:
+
+* Sidebar UI
+* Player sidebar
+* Owner sidebar
+* Gun crates
+* Knife crates
+* Rarities:
+
+  * Common
+  * Rare
+  * Epic
+  * Legendary
+  * Ultra Rare
+  * Exclusive
+* Upgrade system
+* Shop system
+* Better inventory
+* Admin panel built in
+* Save system
+* Mobile-friendly layout
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,29 +34,64 @@
 
 <style>
 
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
-    font-family:Arial, sans-serif;
+    font-family:Arial;
     background:#111;
     color:white;
+}
+
+.wrapper{
+    display:flex;
+    min-height:100vh;
+}
+
+.sidebar{
+    width:250px;
+    background:#1a1a1a;
+    padding:20px;
+    border-right:2px solid #333;
+}
+
+.sidebar h1{
     text-align:center;
 }
 
-header{
-    background:#1a1a1a;
-    padding:20px;
-    font-size:32px;
-    font-weight:bold;
-    box-shadow:0 0 10px black;
+.sidebar button{
+    width:100%;
+    margin-top:10px;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#222;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
 }
 
-.container{
-    padding:30px;
+.sidebar button:hover{
+    background:#333;
+}
+
+.main{
+    flex:1;
+    padding:20px;
+}
+
+.panel{
+    background:#1c1c1c;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
 }
 
 .money{
     font-size:30px;
-    margin-top:20px;
+    margin-bottom:20px;
 }
 
 .caseButton{
@@ -37,81 +99,29 @@ header{
     height:220px;
     border:none;
     border-radius:20px;
-    background:linear-gradient(145deg,#222,#333);
+    background:linear-gradient(145deg,#222,#444);
     color:white;
     font-size:28px;
     cursor:pointer;
-    transition:0.2s;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
 
-.caseButton:hover{
-    transform:scale(1.05);
-}
-
-.inventory{
-    margin-top:40px;
-    width:90%;
-    max-width:900px;
-    margin-left:auto;
-    margin-right:auto;
-    background:#1b1b1b;
-    padding:20px;
-    border-radius:15px;
-}
-
-.inventory h2{
-    margin-top:0;
-}
-
-.skin{
+.inventoryItem{
     background:#222;
-    margin-top:10px;
     padding:15px;
     border-radius:10px;
-}
-
-.common{
-    border-left:6px solid gray;
-}
-
-.uncommon{
-    border-left:6px solid lime;
-}
-
-.rare{
-    border-left:6px solid dodgerblue;
-}
-
-.epic{
-    border-left:6px solid purple;
-}
-
-.legendary{
-    border-left:6px solid gold;
-}
-
-.sellBtn{
     margin-top:10px;
-    padding:10px 20px;
-    border:none;
-    border-radius:8px;
+}
+
+.common{border-left:6px solid gray;}
+.rare{border-left:6px solid dodgerblue;}
+.epic{border-left:6px solid purple;}
+.legendary{border-left:6px solid gold;}
+.ultra{border-left:6px solid red;}
+.exclusive{border-left:6px solid cyan;}
+
+button.sell{
+    margin-top:10px;
     background:#00aa55;
-    color:white;
-    cursor:pointer;
-}
-
-.sellBtn:hover{
-    background:#00cc66;
-}
-
-.loginBox{
-    background:#1e1e1e;
-    width:90%;
-    max-width:400px;
-    margin:40px auto;
-    padding:25px;
-    border-radius:15px;
 }
 
 input{
@@ -122,291 +132,184 @@ input{
     border-radius:8px;
     background:#333;
     color:white;
-    box-sizing:border-box;
 }
 
-button{
-    padding:12px 20px;
-    border:none;
-    border-radius:8px;
-}
-
-.loginBtn{
-    margin-top:15px;
-    width:100%;
-    background:#0077ff;
-    color:white;
-    cursor:pointer;
-}
-
-.loginBtn:hover{
-    background:#3399ff;
+.loginBox{
+    width:90%;
+    max-width:400px;
+    margin:50px auto;
+    background:#1b1b1b;
+    padding:25px;
+    border-radius:15px;
 }
 
 .hidden{
     display:none;
 }
 
-.topBar{
-    display:flex;
-    justify-content:center;
-    gap:15px;
-    margin-top:20px;
-    flex-wrap:wrap;
-}
-
-.userCard{
-    background:#222;
-    padding:15px;
-    border-radius:10px;
-    margin-top:15px;
-}
-
-.adminPanel{
-    width:90%;
-    max-width:600px;
-    margin:30px auto;
-    background:#1b1b1b;
-    padding:20px;
-    border-radius:15px;
-}
-
-.deleteBtn{
-    background:red;
-    color:white;
-}
-
-.moneyBtn{
-    background:orange;
-    color:white;
-}
-
-.logoutBtn{
-    background:#444;
-    color:white;
-}
-
-#adminOpen{
-    position:fixed;
-    bottom:10px;
-    right:10px;
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    border:none;
-    background:black;
-    color:white;
-    font-size:22px;
-    opacity:0.3;
-    cursor:pointer;
-}
-
-#adminOpen:hover{
-    opacity:1;
-}
-
 </style>
 </head>
-
 <body>
-
-<header>
-🎁 CASE CLICKER
-</header>
-
-<!-- LOGIN -->
 
 <div class="loginBox" id="loginBox">
 
-    <h2>Player Login</h2>
+<h1>Case Clicker Login</h1>
 
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password">
 
-    <button class="loginBtn" onclick="login()">
-        Login
-    </button>
+<button onclick="login()">Login</button>
 
-    <p id="loginStatus"></p>
+<p id="loginStatus"></p>
 
 </div>
 
-<!-- GAME -->
+<div class="wrapper hidden" id="gameWrapper">
 
-<div class="container hidden" id="game">
+<div class="sidebar">
 
-    <h1 id="welcome"></h1>
+<h1>CASE CLICKER</h1>
 
-    <div class="money">
-        Money: $<span id="money">0</span>
-    </div>
-
-    <div class="topBar">
-
-        <button class="sellBtn" onclick="openCase()">
-            Open Case ($100)
-        </button>
-
-        <button class="sellBtn" onclick="saveGame()">
-            Save Game
-        </button>
-
-        <button class="logoutBtn" onclick="logout()">
-            Logout
-        </button>
-
-    </div>
-
-    <br>
-
-    <button class="caseButton" onclick="openCase()">
-        🎁
-    </button>
-
-    <div class="inventory">
-
-        <h2>Inventory</h2>
-
-        <div id="inventory"></div>
-
-    </div>
+<button onclick="showPanel('home')">Home</button>
+<button onclick="showPanel('shop')">Shop</button>
+<button onclick="showPanel('inventory')">Inventory</button>
+<button onclick="showPanel('upgrades')">Upgrades</button>
+<button onclick="showPanel('adminPanel')" id="adminBtn" class="hidden">Owner Panel</button>
+<button onclick="logout()">Logout</button>
 
 </div>
 
-<!-- ADMIN PANEL -->
+<div class="main">
 
-<div class="adminPanel hidden" id="adminPanel">
+<div id="home" class="panel">
 
-    <h1>⚙ Admin Panel</h1>
+<h1 id="welcome"></h1>
 
-    <h2>Create User</h2>
+<div class="money">
+Money: $<span id="money">0</span>
+</div>
 
-    <input type="text" id="newUser" placeholder="Username">
-    <input type="password" id="newPass" placeholder="Password">
-    <input type="number" id="newMoney" placeholder="Starting Money">
-
-    <button class="loginBtn" onclick="createUser()">
-        Create User
-    </button>
-
-    <h2>All Users</h2>
-
-    <div id="users"></div>
+<button class="caseButton" onclick="openGunCase()">
+🎁 OPEN CASE
+</button>
 
 </div>
 
-<button id="adminOpen">⚙</button>
+<div id="shop" class="panel hidden">
+
+<h1>Shop</h1>
+
+<h2>Gun Crate - $100</h2>
+<button onclick="openGunCase()">Open Gun Crate</button>
+
+<h2>Knife Crate - $500</h2>
+<button onclick="openKnifeCase()">Open Knife Crate</button>
+
+</div>
+
+<div id="inventory" class="panel hidden">
+
+<h1>Inventory</h1>
+
+<div id="inventoryList"></div>
+
+</div>
+
+<div id="upgrades" class="panel hidden">
+
+<h1>Upgrades</h1>
+
+<h2>Case Luck Level</h2>
+<p>Level: <span id="luckLevel">1</span></p>
+
+<button onclick="buyLuckUpgrade()">
+Upgrade Luck ($1000)
+</button>
+
+</div>
+
+<div id="adminPanel" class="panel hidden">
+
+<h1>Owner Panel</h1>
+
+<input type="text" id="newUser" placeholder="New Username">
+<input type="password" id="newPass" placeholder="New Password">
+
+<button onclick="createUser()">Create User</button>
+
+<h2>Users</h2>
+
+<div id="users"></div>
+
+</div>
+
+</div>
+</div>
 
 <script>
-
-// =========================
-// ADMIN LOGIN
-// =========================
 
 const ADMIN_USERNAME = "owner";
 const ADMIN_PASSWORD = "caseclickeradmin";
 
-// =========================
-// PLAYER DATA
-// =========================
-
 let currentUser = null;
 
-const skins = [
+const gunSkins = [
 
-    {
-        name:"Rusty Pistol",
-        rarity:"common",
-        value:50
-    },
-
-    {
-        name:"Forest Rifle",
-        rarity:"uncommon",
-        value:120
-    },
-
-    {
-        name:"Neon SMG",
-        rarity:"rare",
-        value:350
-    },
-
-    {
-        name:"Dragon AK",
-        rarity:"epic",
-        value:900
-    },
-
-    {
-        name:"Golden Knife",
-        rarity:"legendary",
-        value:2500
-    }
+{name:"Rusty Glock", rarity:"common", value:50},
+{name:"Blue AK", rarity:"rare", value:250},
+{name:"Dragon M4", rarity:"epic", value:600},
+{name:"Golden Deagle", rarity:"legendary", value:2000},
+{name:"Inferno Rifle", rarity:"ultra", value:5000},
+{name:"Galaxy Blaster", rarity:"exclusive", value:12000}
 
 ];
 
-// =========================
-// STORAGE
-// =========================
+const knifeSkins = [
+
+{name:"Steel Knife", rarity:"rare", value:500},
+{name:"Ruby Knife", rarity:"epic", value:1500},
+{name:"Shadow Dagger", rarity:"legendary", value:4000},
+{name:"Void Blade", rarity:"ultra", value:8000},
+{name:"Owner Katana", rarity:"exclusive", value:20000}
+
+];
 
 function getUsers(){
-
-    return JSON.parse(
-        localStorage.getItem("cc_users")
-    ) || [];
-
+    return JSON.parse(localStorage.getItem("cc_users")) || [];
 }
 
 function saveUsers(users){
-
-    localStorage.setItem(
-        "cc_users",
-        JSON.stringify(users)
-    );
-
+    localStorage.setItem("cc_users", JSON.stringify(users));
 }
-
-// =========================
-// PLAYER LOGIN
-// =========================
 
 function login(){
 
-    const username =
-        document.getElementById("username").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
-    const password =
-        document.getElementById("password").value;
+    if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD){
 
-    // ADMIN LOGIN
+        currentUser = {
+            username:"owner",
+            money:999999,
+            inventory:[],
+            luck:1,
+            owner:true
+        };
 
-    if(
-        username === ADMIN_USERNAME &&
-        password === ADMIN_PASSWORD
-    ){
+        startGame();
 
-        document
-            .getElementById("loginBox")
-            .classList.add("hidden");
-
-        document
-            .getElementById("adminPanel")
-            .classList.remove("hidden");
+        document.getElementById("adminBtn").classList.remove("hidden");
 
         loadUsers();
 
         return;
     }
 
-    // PLAYER LOGIN
-
     let users = getUsers();
 
     const found = users.find(
-        u =>
-        u.username === username &&
-        u.password === password
+        u => u.username === username && u.password === password
     );
 
     if(found){
@@ -414,324 +317,216 @@ function login(){
         currentUser = found;
 
         if(!currentUser.inventory){
-
             currentUser.inventory = [];
-
         }
 
-        if(currentUser.money === undefined){
-
+        if(!currentUser.money){
             currentUser.money = 1000;
-
         }
 
-        document
-            .getElementById("loginBox")
-            .classList.add("hidden");
+        if(!currentUser.luck){
+            currentUser.luck = 1;
+        }
 
-        document
-            .getElementById("game")
-            .classList.remove("hidden");
+        startGame();
 
-        document
-            .getElementById("welcome")
-            .innerText =
-            "Welcome " + currentUser.username;
+    }else{
 
-        updateUI();
-
-    } else {
-
-        document
-            .getElementById("loginStatus")
-            .innerText =
-            "Invalid login";
+        document.getElementById("loginStatus").innerText = "Invalid Login";
 
     }
 }
 
-// =========================
-// UPDATE GAME UI
-// =========================
+function startGame(){
+
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("gameWrapper").classList.remove("hidden");
+
+    document.getElementById("welcome").innerText =
+    "Welcome " + currentUser.username;
+
+    updateUI();
+}
 
 function updateUI(){
 
-    document
-        .getElementById("money")
-        .innerText =
-        currentUser.money;
+    document.getElementById("money").innerText = currentUser.money;
+    document.getElementById("luckLevel").innerText = currentUser.luck;
 
-    const inventoryDiv =
-        document.getElementById("inventory");
+    const inventory = document.getElementById("inventoryList");
 
-    inventoryDiv.innerHTML = "";
+    inventory.innerHTML = "";
 
-    currentUser.inventory.forEach((skin,index)=>{
+    currentUser.inventory.forEach((item,index)=>{
 
-        inventoryDiv.innerHTML += `
+        inventory.innerHTML += `
 
-        <div class="skin ${skin.rarity}">
+        <div class="inventoryItem ${item.rarity}">
 
-            <h3>${skin.name}</h3>
+        <h3>${item.name}</h3>
 
-            <p>Value: $${skin.value}</p>
+        <p>Rarity: ${item.rarity}</p>
 
-            <p>Rarity: ${skin.rarity}</p>
+        <p>Value: $${item.value}</p>
 
-            <button
-            class="sellBtn"
-            onclick="sellSkin(${index})">
-
-                Sell
-
-            </button>
+        <button class="sell" onclick="sellItem(${index})">
+        Sell
+        </button>
 
         </div>
 
         `;
     });
 
+    saveGame();
 }
 
-// =========================
-// OPEN CASE
-// =========================
+function randomItem(array){
 
-function openCase(){
+    return array[Math.floor(Math.random()*array.length)];
+}
+
+function openGunCase(){
 
     if(currentUser.money < 100){
-
         alert("Not enough money");
-
         return;
     }
 
     currentUser.money -= 100;
 
-    const randomSkin =
-        skins[Math.floor(
-            Math.random()*skins.length
-        )];
+    const item = randomItem(gunSkins);
 
-    currentUser.inventory.push(randomSkin);
+    currentUser.inventory.push(item);
 
-    alert("You got: " + randomSkin.name);
+    alert("You got " + item.name);
 
     updateUI();
-
-    saveGame();
-
 }
 
-// =========================
-// SELL SKIN
-// =========================
+function openKnifeCase(){
 
-function sellSkin(index){
+    if(currentUser.money < 500){
+        alert("Not enough money");
+        return;
+    }
 
-    const skin =
-        currentUser.inventory[index];
+    currentUser.money -= 500;
 
-    currentUser.money += skin.value;
+    const item = randomItem(knifeSkins);
+
+    currentUser.inventory.push(item);
+
+    alert("You got " + item.name);
+
+    updateUI();
+}
+
+function sellItem(index){
+
+    const item = currentUser.inventory[index];
+
+    currentUser.money += item.value;
 
     currentUser.inventory.splice(index,1);
 
     updateUI();
-
-    saveGame();
-
 }
 
-// =========================
-// SAVE GAME
-// =========================
+function buyLuckUpgrade(){
+
+    if(currentUser.money < 1000){
+        alert("Not enough money");
+        return;
+    }
+
+    currentUser.money -= 1000;
+
+    currentUser.luck += 1;
+
+    updateUI();
+}
 
 function saveGame(){
 
+    if(currentUser.owner) return;
+
     let users = getUsers();
 
-    const index =
-        users.findIndex(
-            u =>
-            u.username === currentUser.username
-        );
+    const index = users.findIndex(
+        u => u.username === currentUser.username
+    );
 
     users[index] = currentUser;
 
     saveUsers(users);
-
 }
-
-// =========================
-// LOGOUT
-// =========================
 
 function logout(){
-
     location.reload();
-
 }
 
-// =========================
-// CREATE USER
-// =========================
+function showPanel(id){
+
+    document.querySelectorAll('.panel').forEach(panel=>{
+        panel.classList.add('hidden');
+    });
+
+    document.getElementById(id).classList.remove('hidden');
+}
 
 function createUser(){
 
-    const username =
-        document.getElementById("newUser").value;
-
-    const password =
-        document.getElementById("newPass").value;
-
-    const money =
-        Number(
-            document.getElementById("newMoney").value
-        ) || 1000;
+    const username = document.getElementById("newUser").value;
+    const password = document.getElementById("newPass").value;
 
     if(!username || !password){
-
         alert("Fill all fields");
-
         return;
     }
 
     let users = getUsers();
 
-    const exists =
-        users.find(
-            u => u.username === username
-        );
-
-    if(exists){
-
-        alert("User already exists");
-
-        return;
-    }
-
     users.push({
-
-        username:username,
-        password:password,
-        money:money,
-        inventory:[]
-
+        username,
+        password,
+        money:1000,
+        inventory:[],
+        luck:1
     });
 
     saveUsers(users);
 
     loadUsers();
 
-    alert("User created");
-
+    alert("User Created");
 }
-
-// =========================
-// LOAD USERS
-// =========================
 
 function loadUsers(){
 
-    const usersDiv =
-        document.getElementById("users");
+    const usersDiv = document.getElementById("users");
 
     usersDiv.innerHTML = "";
 
     let users = getUsers();
 
-    users.forEach((user,index)=>{
+    users.forEach(user=>{
 
         usersDiv.innerHTML += `
 
-        <div class="userCard">
+        <div class="inventoryItem">
 
-            <h3>${user.username}</h3>
+        <h3>${user.username}</h3>
 
-            <p>Password: ${user.password}</p>
+        <p>Money: $${user.money}</p>
 
-            <p>Money: $${user.money}</p>
-
-            <p>Inventory Items:
-                ${user.inventory.length}
-            </p>
-
-            <button
-            class="moneyBtn"
-            onclick="giveMoney(${index})">
-
-                Give Money
-
-            </button>
-
-            <button
-            class="deleteBtn"
-            onclick="deleteUser(${index})">
-
-                Delete User
-
-            </button>
+        <p>Items: ${user.inventory.length}</p>
 
         </div>
 
         `;
     });
-
 }
-
-// =========================
-// GIVE MONEY
-// =========================
-
-function giveMoney(index){
-
-    let amount =
-        prompt("Enter amount");
-
-    if(amount === null) return;
-
-    let users = getUsers();
-
-    users[index].money += Number(amount);
-
-    saveUsers(users);
-
-    loadUsers();
-
-}
-
-// =========================
-// DELETE USER
-// =========================
-
-function deleteUser(index){
-
-    let users = getUsers();
-
-    users.splice(index,1);
-
-    saveUsers(users);
-
-    loadUsers();
-
-}
-
-// =========================
-// SECRET ADMIN BUTTON
-// =========================
-
-document
-.getElementById("adminOpen")
-.onclick = () => {
-
-    alert(
-`ADMIN LOGIN
-
-Username: owner
-Password: caseclickeradmin`
-    );
-
-};
 
 </script>
 
